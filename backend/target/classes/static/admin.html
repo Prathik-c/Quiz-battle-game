@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Battle - Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <h1 class="logo">⚙️ Admin Dashboard</h1>
+            <div class="user-info">
+                <span id="currentUser">Admin</span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <div class="nav-item active" data-tab="quizzes">
+                    <span class="icon">📋</span>
+                    <span>Quizzes</span>
+                </div>
+                <div class="nav-item" data-tab="questions">
+                    <span class="icon">❓</span>
+                    <span>Questions</span>
+                </div>
+                <div class="nav-item" data-tab="games">
+                    <span class="icon">🎮</span>
+                    <span>Game Sessions</span>
+                </div>
+                <div class="nav-item" data-tab="analytics">
+                    <span class="icon">📊</span>
+                    <span>Analytics</span>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <!-- Quizzes Tab -->
+            <section id="quizzesTab" class="tab-section active">
+                <div class="section-header">
+                    <h2>Manage Quizzes</h2>
+                    <button id="createQuizBtn" class="btn btn-primary">+ Create Quiz</button>
+                </div>
+
+                <!-- Quiz Table -->
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Questions</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quizTable">
+                            <!-- Quizzes will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Questions Tab -->
+            <section id="questionsTab" class="tab-section">
+                <div class="section-header">
+                    <h2>Manage Questions</h2>
+                    <button id="createQuestionBtn" class="btn btn-primary">+ Add Question</button>
+                </div>
+
+                <!-- Questions Table -->
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Question</th>
+                                <th>Quiz</th>
+                                <th>Difficulty</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questionTable">
+                            <!-- Questions will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Games Tab -->
+            <section id="gamesTab" class="tab-section">
+                <div class="section-header">
+                    <h2>Game Sessions</h2>
+                </div>
+
+                <!-- Games Table -->
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Game ID</th>
+                                <th>Quiz</th>
+                                <th>Players</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gameTable">
+                            <!-- Games will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section id="analyticsTab" class="tab-section">
+                <div class="section-header">
+                    <h2>Analytics</h2>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Total Quizzes</h3>
+                        <div class="stat-value" id="totalQuizzes">0</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Total Questions</h3>
+                        <div class="stat-value" id="totalQuestions">0</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Active Games</h3>
+                        <div class="stat-value" id="activeGames">0</div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Total Players</h3>
+                        <div class="stat-value" id="totalPlayers">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Quiz Performance</h3>
+                    <div id="performanceChart" style="height: 300px; background: var(--bg-secondary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        Chart placeholder - Integrate Chart.js for visualization
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Create/Edit Quiz Modal -->
+    <div id="quizModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Quiz</h2>
+                <button class="close-btn" onclick="closeQuizModal()">×</button>
+            </div>
+            <form id="quizForm" class="modal-form">
+                <div class="form-group">
+                    <label for="quizTitle">Title</label>
+                    <input type="text" id="quizTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="quizDescription">Description</label>
+                    <textarea id="quizDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Quiz</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeQuizModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create/Edit Question Modal -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Question</h2>
+                <button class="close-btn" onclick="closeQuestionModal()">×</button>
+            </div>
+            <form id="questionForm" class="modal-form">
+                <div class="form-group">
+                    <label for="questionQuiz">Quiz</label>
+                    <select id="questionQuiz" name="quiz" required>
+                        <option value="">Select a quiz</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="questionText">Question</label>
+                    <textarea id="questionText" name="text" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="optionA">Option A</label>
+                    <input type="text" id="optionA" name="optionA" required>
+                </div>
+                <div class="form-group">
+                    <label for="optionB">Option B</label>
+                    <input type="text" id="optionB" name="optionB" required>
+                </div>
+                <div class="form-group">
+                    <label for="optionC">Option C</label>
+                    <input type="text" id="optionC" name="optionC" required>
+                </div>
+                <div class="form-group">
+                    <label for="optionD">Option D</label>
+                    <input type="text" id="optionD" name="optionD" required>
+                </div>
+                <div class="form-group">
+                    <label for="correctAnswer">Correct Answer</label>
+                    <select id="correctAnswer" name="correctAnswer" required>
+                        <option value="">Select correct option</option>
+                        <option value="A">Option A</option>
+                        <option value="B">Option B</option>
+                        <option value="C">Option C</option>
+                        <option value="D">Option D</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Question</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeQuestionModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- WebSocket Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <!-- Admin Script -->
+    <script src="/js/admin.js"></script>
+</body>
+</html>

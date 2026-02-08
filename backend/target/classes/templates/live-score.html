@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Score</title>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2/dist/stomp.min.js"></script>
+</head>
+
+<body>
+<h2>Live Score</h2>
+<div id="score">Waiting...</div>
+
+<script>
+  const gameId = 1; // change this
+  const socket = new SockJS("http://localhost:8080/ws");
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    console.log("✅ Connected to STOMP");
+
+    stompClient.subscribe(
+            `/topic/game/${gameId}/score`,
+            (message) => {
+              const data = JSON.parse(message.body);
+              document.getElementById("score").innerText =
+                      `PlayerGame ${data.playerGameId} Score: ${data.score}`;
+            }
+    );
+  });
+</script>
+</body>
+</html>

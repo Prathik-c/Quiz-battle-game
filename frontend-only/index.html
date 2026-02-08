@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quiz Battle — Play</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">⚔️ <strong>Quiz Battle</strong></div>
+      <div class="user-block">
+        <div id="userAvatar" class="avatar">U</div>
+        <div>
+          <div id="currentUser">Guest</div>
+          <button id="authBtn" class="link">Login / Register</button>
+        </div>
+      </div>
+      <nav class="nav">
+        <button data-screen="quizzes" class="nav-btn active">Quizzes</button>
+        <button data-screen="admin" class="nav-btn">Admin</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="search">
+          <input id="searchInput" placeholder="Search quizzes..." />
+        </div>
+        <div class="controls">
+          <button id="refreshBtn" class="btn">Refresh</button>
+        </div>
+      </header>
+
+      <section id="quizzes" class="screen active">
+        <h2>Available Quizzes</h2>
+        <div id="quizList" class="cards"></div>
+      </section>
+
+      <section id="lobby" class="screen">
+        <button id="backBtn" class="btn small">← Back</button>
+        <div class="lobby-card">
+          <h2 id="lobbyTitle">Quiz</h2>
+          <p id="lobbyDesc"></p>
+          <div class="meta">
+            <span id="lobbyCount">0 questions</span>
+            <span id="lobbyDifficulty">Medium</span>
+          </div>
+          <div class="lobby-actions">
+            <button id="createGameBtn" class="btn primary">Create Game</button>
+            <button id="startGameBtn" class="btn" disabled>Start Game</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="play" class="screen">
+        <div class="play-header">
+          <h3 id="playTitle">Playing</h3>
+          <div class="timer"><span id="timer">30</span>s</div>
+        </div>
+        <div id="questionArea" class="question-area">
+          <h4 id="questionText">Question will appear here</h4>
+          <div id="options" class="options"></div>
+        </div>
+      </section>
+
+      <section id="results" class="screen">
+        <h2>Results</h2>
+        <div id="resultsContent"></div>
+        <button id="returnBtn" class="btn">Return</button>
+      </section>
+
+      <section id="admin" class="screen">
+        <h2>Admin</h2>
+        <div class="admin-grid">
+          <div>
+            <h3>Create Quiz</h3>
+            <form id="createQuizForm">
+              <input id="newQuizTitle" placeholder="Title" required />
+              <textarea id="newQuizDesc" placeholder="Description"></textarea>
+              <button class="btn primary" type="submit">Create</button>
+            </form>
+          </div>
+          <div>
+            <h3>Quizzes</h3>
+            <div id="adminQuizList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="authModal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="authTitle">Login</h3>
+      <form id="authForm">
+        <input id="authUsername" placeholder="Username" required />
+        <input id="authPassword" placeholder="Password" type="password" required />
+        <div class="modal-actions">
+          <button type="submit" class="btn primary">Login</button>
+          <button type="button" id="authSwitch" class="btn">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
