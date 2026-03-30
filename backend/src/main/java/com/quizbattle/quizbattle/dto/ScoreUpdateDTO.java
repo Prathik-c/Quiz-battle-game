@@ -1,20 +1,15 @@
 package com.quizbattle.quizbattle.dto;
 
-public class ScoreUpdateDTO {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ScoreUpdateDTO {
     private Long playerGameId;
     private int score;
-
-    public ScoreUpdateDTO(Long playerGameId, int score) {
-        this.playerGameId = playerGameId;
-        this.score = score;
-    }
-
-    public Long getPlayerGameId() {
-        return playerGameId;
-    }
-
-    public int getScore() {
-        return score;
-    }
 }

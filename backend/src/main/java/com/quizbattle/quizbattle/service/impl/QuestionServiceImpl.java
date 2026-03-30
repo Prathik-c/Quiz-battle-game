@@ -35,4 +35,27 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getQuestionsByQuizId(Long quizId) {
         return questionRepository.findByQuizId(quizId);
     }
+    
+    @Override
+    public Question updateQuestion(Long id, Question question) {
+        Question existing = questionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Question not found with ID: " + id));
+        
+        existing.setQuestionText(question.getQuestionText());
+        existing.setOptionA(question.getOptionA());
+        existing.setOptionB(question.getOptionB());
+        existing.setOptionC(question.getOptionC());
+        existing.setOptionD(question.getOptionD());
+        existing.setCorrectAnswer(question.getCorrectAnswer());
+        
+        return questionRepository.save(existing);
+    }
+    
+    @Override
+    public void deleteQuestion(Long id) {
+        if (!questionRepository.existsById(id)) {
+            throw new RuntimeException("Question not found with ID: " + id);
+        }
+        questionRepository.deleteById(id);
+    }
 }

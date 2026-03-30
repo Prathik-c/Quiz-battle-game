@@ -5,6 +5,7 @@ import com.quizbattle.quizbattle.repository.GameSessionRepository;
 import com.quizbattle.quizbattle.repository.QuizRepository;
 import com.quizbattle.quizbattle.service.GameSessionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.quizbattle.quizbattle.entity.GameSession;
 
 import java.util.List;
@@ -21,9 +22,13 @@ public class GameSessionServiceImpl implements GameSessionService {
         this.quizRepository = quizRepository;
     }
 
+    @Override
+    @Transactional
     public GameSession createGameSession(Long quizId) {
         GameSession game = new GameSession();
-        game.setQuiz(quizRepository.findById(quizId).orElseThrow());
+        Quiz quiz = quizRepository.findByIdWithQuestions(quizId)
+                .orElseThrow(() -> new RuntimeException("Quiz not found with ID: " + quizId));
+        game.setQuiz(quiz);
         game.setStatus(GameSession.GameStatus.CREATED);
         game.setCurrentQuestionIndex(0);
         game.setScore(0);
@@ -32,17 +37,20 @@ public class GameSessionServiceImpl implements GameSessionService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public GameSession getGameSession(Long gameId) {
-        return gameSessionRepository.findById(gameId)
-                .orElseThrow(() -> new RuntimeException("Game session not found"));
+        return gameSessionRepository.findByIdWithQuiz(gameId)
+                .orElseThrow(() -> new RuntimeException("Game session not found with ID: " + gameId));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GameSession> getAllGameSessions() {
         return gameSessionRepository.findAll();
     }
 
     @Override
+    @Transactional
     public GameSession startGame(Long gameId) {
         GameSession session = getGameSession(gameId);
         session.setStatus(GameSession.GameStatus.STARTED);
@@ -50,6 +58,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
+    @Transactional
     public GameSession completeGame(Long gameId) {
         GameSession session = getGameSession(gameId);
         session.setStatus(GameSession.GameStatus.COMPLETED);

@@ -1,6 +1,7 @@
 package com.quizbattle.quizbattle.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,10 +29,13 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("quiz-questions")
     private Quiz quiz;
 
     public String getCorrectOption() {
-        return correctAnswer;
+        if (correctAnswer == null) {
+            return null;
+        }
+        return correctAnswer.trim().toUpperCase();
     }
 }

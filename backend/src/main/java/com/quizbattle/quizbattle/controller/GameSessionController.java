@@ -1,4 +1,5 @@
 package com.quizbattle.quizbattle.controller;
+
 import com.quizbattle.quizbattle.entity.GameSession;
 import com.quizbattle.quizbattle.service.GameSessionService;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/games")
-@CrossOrigin(origins = {"http://localhost:8080", "http://127.0.0.1:5500", "http://localhost:5500"})
 public class GameSessionController {
 
     private final GameSessionService gameSessionService;
@@ -18,26 +18,46 @@ public class GameSessionController {
 
     @PostMapping("/create/{quizId}")
     public GameSession create(@PathVariable Long quizId) {
-        return gameSessionService.createGameSession(quizId);
+        try {
+            return gameSessionService.createGameSession(quizId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create game: " + e.getMessage(), e);
+        }
     }
 
     @PutMapping("/start/{gameId}")
     public GameSession start(@PathVariable Long gameId) {
-        return gameSessionService.startGame(gameId);
+        try {
+            return gameSessionService.startGame(gameId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to start game: " + e.getMessage(), e);
+        }
     }
 
     @PutMapping("/complete/{gameId}")
     public GameSession complete(@PathVariable Long gameId) {
-        return gameSessionService.completeGame(gameId);
+        try {
+            return gameSessionService.completeGame(gameId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to complete game: " + e.getMessage(), e);
+        }
     }
 
     @GetMapping("/{gameId}")
     public GameSession get(@PathVariable Long gameId) {
-        return gameSessionService.getGameSession(gameId);
+        try {
+            return gameSessionService.getGameSession(gameId);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch game: " + e.getMessage(), e);
+        }
     }
 
     @GetMapping
     public List<GameSession> all() {
-        return gameSessionService.getAllGameSessions();
+        try {
+            return gameSessionService.getAllGameSessions();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch games: " + e.getMessage(), e);
+        }
     }
 }

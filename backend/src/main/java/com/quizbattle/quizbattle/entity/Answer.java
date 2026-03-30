@@ -1,9 +1,17 @@
 package com.quizbattle.quizbattle.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "answer")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Answer {
 
     @Id
@@ -23,20 +31,4 @@ public class Answer {
 
     @Column(name = "is_correct")
     private boolean correct;
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public void setSelectedOption(String selectedOption) {
-        this.selectedOption = selectedOption;
-    }
-
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
-    }
 }

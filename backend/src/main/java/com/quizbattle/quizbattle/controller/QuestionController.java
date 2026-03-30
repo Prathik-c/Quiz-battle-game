@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/questions")
-@CrossOrigin(origins = "http://localhost:8080")
+
 public class QuestionController {
 
     private final QuestionService questionService;
@@ -18,8 +18,16 @@ public class QuestionController {
     }
 
     // Add question to a quiz
+    @PostMapping
+    public Question createQuestion(@RequestBody Question question) {
+        if (question.getQuiz() == null || question.getQuiz().getId() == null) {
+            throw new RuntimeException("Quiz ID is required");
+        }
+        return questionService.createQuestion(question.getQuiz().getId(), question);
+    }
+
     @PostMapping("/quiz/{quizId}")
-    public Question createQuestion(
+    public Question createQuestionByQuizId(
             @PathVariable Long quizId,
             @RequestBody Question question) {
 
@@ -30,5 +38,15 @@ public class QuestionController {
     @GetMapping("/quiz/{quizId}")
     public List<Question> getQuestions(@PathVariable Long quizId) {
         return questionService.getQuestionsByQuizId(quizId);
+    }
+    
+    @PutMapping("/{id}")
+    public Question updateQuestion(@PathVariable Long id, @RequestBody Question question) {
+        return questionService.updateQuestion(id, question);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteQuestion(@PathVariable Long id) {
+        questionService.deleteQuestion(id);
     }
 }
