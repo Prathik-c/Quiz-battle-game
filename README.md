@@ -1,108 +1,147 @@
-# Quiz Battle ⚔️
+# 🎮 Quiz Battle
 
-A real-time multiplayer quiz game built with **Spring Boot** backend and **vanilla JavaScript** frontend.
+A **real-time multiplayer quiz platform** where players can create, host, and compete in live quiz sessions. Built with a Spring Boot REST + WebSocket backend and a React frontend.
+
+---
+
+## 🚀 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Java 17, Spring Boot 3.3.4 |
+| Real-time | WebSocket (STOMP over SockJS) |
+| Database | MySQL 8.0 + Spring Data JPA / Hibernate |
+| Connection Pool | HikariCP |
+| Frontend | React (Vite) |
+| Build Tool | Maven |
+
+---
+
+## ✨ Features
+
+- 🎯 Create and manage quizzes with multiple-choice questions (A/B/C/D)
+- 🔴 Real-time multiplayer game sessions via WebSocket
+- ⏱️ 30-second countdown timer per question
+- 📊 Live score tracking and leaderboard
+- 🔍 Search quizzes by name
+- 🌙 Dark-themed responsive UI
+- 🔒 CORS configured for cross-origin frontend integration
+
+---
 
 ## 📁 Project Structure
 
 ```
-quiz-battle/
-├── backend/              # Spring Boot REST API + WebSocket server
+Quiz-battle-game/
+├── backend/                  # Spring Boot application
 │   ├── src/
-│   ├── pom.xml
-│   └── mvnw              # Maven wrapper for building
+│   │   └── main/
+│   │       ├── java/com/quizbattle/
+│   │       │   ├── controller/       # REST controllers
+│   │       │   ├── model/            # JPA entities
+│   │       │   ├── repository/       # Spring Data repositories
+│   │       │   ├── service/          # Business logic
+│   │       │   └── websocket/        # WebSocket config & handlers
+│   │       └── resources/
+│   │           └── application.properties
+│   └── pom.xml
 │
-├── frontend-only/        # Standalone frontend (Player + Admin UI)
-│   ├── index.html        # Main entry point
-│   ├── css/              # Styling
-│   └── js/               # Client logic
-│
-└── README.md
+└── frontend/                 # React frontend
+    ├── src/
+    └── package.json
 ```
 
-## 🚀 Quick Start
+---
 
-### Backend
+## ⚙️ Local Setup
+
+### Prerequisites
+- Java 17+
+- MySQL 8.0+
+- Node.js 18+ (for frontend)
+- Maven (or use the included `mvnw` wrapper)
+
+### 1. Database Setup
+
+```sql
+CREATE DATABASE quizbattle;
+```
+
+### 2. Backend Configuration
+
+Edit `backend/src/main/resources/application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/quizbattle
+spring.datasource.username=your_mysql_username
+spring.datasource.password=your_mysql_password
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### 3. Run Backend
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
-Backend runs on **http://localhost:8080**
 
-API endpoints:
-- `GET /quizzes` - List all quizzes
-- `POST /quizzes` - Create a quiz
-- `GET /questions/quiz/{id}` - Get questions for a quiz
-- `POST /games/create/{quizId}` - Create a game session
-- `PUT /games/start/{gameId}` - Start a game
-- `POST /answers` - Submit an answer
-- `GET /games/{gameId}` - Get game state
+Backend starts at **http://localhost:8080**
 
-### Frontend
-```bash
-cd frontend-only
-python -m http.server 5500
-```
-Frontend runs on **http://localhost:5500**
-
-**Features:**
-- Player mode: Browse quizzes → Create game → Play → View results
-- Admin mode: Create new quizzes
-- Real-time score tracking
-- 30-second timer per question
-- Search quizzes
-
-## 📋 Requirements
-
-- **Java 17+**
-- **MySQL 8.0+**
-- **Python 3.7+** (for frontend dev server)
-
-## 🛠️ Technology Stack
-
-**Backend:**
-- Spring Boot 3.3.4
-- Spring Data JPA / Hibernate
-- MySQL with HikariCP
-- REST API + WebSocket (STOMP)
-- CORS enabled
-
-**Frontend:**
-- HTML5
-- CSS3 (Dark theme)
-- Vanilla JavaScript
-- SockJS + Stomp.js (WebSocket)
-
-## 📝 Database Schema
-
-Key entities:
-- **Quiz** - Quiz title, description, and questions
-- **Question** - Question text with options A/B/C/D and correct answer
-- **GameSession** - Active game with quiz, current question, score, status
-- **Answer** - Tracks player answers during gameplay
-- **User** (optional for future auth)
-
-## 🔧 Configuration
-
-Edit `backend/src/main/resources/application.properties` to configure:
-- Database connection
-- Server port
-- CORS origins
-
-## 📦 Building for Production
+### 4. Run Frontend
 
 ```bash
-cd backend
-./mvnw clean package
+cd frontend
+npm install
+npm run dev
 ```
-JAR output: `backend/target/quizbattle-0.0.1-SNAPSHOT.jar`
 
-## 🤝 Contributing
+Frontend starts at **http://localhost:5173**
 
-1. Create a feature branch
-2. Make changes
-3. Test both backend and frontend
-4. Commit and push
+---
 
-## 📄 License
+## 🔌 API Endpoints
 
-MIT
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/quizzes` | Get all quizzes |
+| POST | `/quizzes` | Create a new quiz |
+| GET | `/questions/quiz/{id}` | Get questions for a quiz |
+| POST | `/games/create/{quizId}` | Create a game session |
+| PUT | `/games/start/{gameId}` | Start a game |
+| POST | `/answers` | Submit an answer |
+| GET | `/games/{gameId}` | Get current game state |
+
+### WebSocket
+
+Connect to: `ws://localhost:8080/ws`
+
+| Topic | Description |
+|-------|-------------|
+| `/topic/game/{gameId}` | Live game state updates |
+| `/app/game/answer` | Submit answer via WebSocket |
+
+---
+
+## 🗄️ Database Schema
+
+| Entity | Description |
+|--------|-------------|
+| `Quiz` | Quiz title and description |
+| `Question` | Question text, options A/B/C/D, correct answer |
+| `GameSession` | Active game state, current question, status |
+| `Answer` | Player answer submissions per session |
+
+---
+
+## 📸 Demo
+
+> Run locally and open http://localhost:5173 to play.
+> Use the Admin panel to create a quiz, then join as a player to start a game session.
+
+---
+
+## 👨‍💻 Author
+
+**Prathik C**  
+B.Tech CSE (AI & ML) — JSS Academy of Technical Education  
+[GitHub](https://github.com/Prathik-c)
